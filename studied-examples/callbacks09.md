@@ -1,18 +1,30 @@
-# Hoisting 1
-
-Before executing your code, JavaScript engines do an initial parse.  In this initial parse they scan through your whole file and declare certain variables ahead of time.  This is "hoisting".
-
+# Callbacks 09
 
 ```js
-let let_variable = "let";
+function higherOrder(arg1, arg2, callBack) {
+	var err = null;
+	var result = null;
+	if((typeof arg1 == 'number') &&  (typeof arg2 == 'number'))	{
+		result = arg1 + arg2;
+		callBack(err, result);
+	} else {
+		err = 'result aint no number';
+		callBack(err, result);
+	};
+};
 
-var var_variable = "var";
+function callBack(err, argument) {
+	// if there was an error, don't use arguments
+	//   it would break your code
+	if(err) {
+		console.log(err);
+	} else {
+		console.log(argument);
+	};
+};
 
-function named() {}
-
-let let_anonymous = function() {}
-
-var var_anonymous = function() {}
+higherOrder(4, 5, callBack);
+higherOrder(4, '5', callBack);
 
 ```
 
@@ -23,14 +35,10 @@ var var_anonymous = function() {}
 ## Step 0
 
 __Predicted Happenings:__  
-* __Global Context__  
-  * _Primitives_    
-    a. var_variable: undefined  
-    b. let_variable: undefined  
+* __Global Context__   
   * _Objects_  
-    a. named: Function  
-    b. var_anonymous: Funciton  
-    c. let_anonymous: Function  
+    a. higherOrder: Function  
+    b. callBack: Function  
 * __Other Contexts__  
   * no other contexts  
 * __Behaviors:__
@@ -46,11 +54,7 @@ __Actual Happenings:__
 * __Other Contexts__  
   * no other contexts  
 * __Behaviors:__
-  * variables defined and hoisted, only the named function was created
-
-Turns out variables declared with "let" are not hoisted.
-
-Named functions are hoisted. But if you put an anonymous function behind a variable JS doesn't care about the function, only the variable (at least for the initial parse).  This is why "var_anonymous" is in primitives, at the initial parse it is set to undefined which is a primitive.  Eventually it'll move to "Objects", but not yet.
+  * named function was created
 
 ---
 
